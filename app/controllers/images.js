@@ -14,10 +14,10 @@ const index = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  res.json( { body: req.body, file: req.file } );
-  // Image.create(req.body.image)
-  //   .then(image => res.json({ image }))
-  //   .catch(err => next(err));
+  // res.json( { body: req.body, file: req.file } );
+  Image.create(req.body.image)
+    .then(image => res.json({ image }))
+    .catch(err => next(err));
 };
 
 
