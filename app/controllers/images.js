@@ -40,10 +40,21 @@ const create = (req, res, next) => {
   }).catch(err => next(err));
 };
 
+const destroy = (req, res, next) => {
+  Image.findById(req.params.id)
+  .then((image) => {
+    image.remove();
+    res.json(true);
+  })
+    // .then(images => res.json({ images }))
+  .catch(err => next(err));
+};
+
 
 module.exports = controller({
   index,
   create,
+  destroy
 }, { before: [
   { method: upload.single('image[file]'), only: ['create'] },
 ], });
