@@ -9,6 +9,7 @@ const Image = require('../app/models/image.js');
 
 let filename = process.argv[2];
 let comment = process.argv[3] || '';
+let name = process.argv[4] || '';
 
 new Promise((resolve, reject) =>
   fs.readFile(filename, (err, data) =>
@@ -23,7 +24,7 @@ new Promise((resolve, reject) =>
   return file;
 }).then(awsUpload)
 .then((awsS3Response) =>
-  Image.create( { location: awsS3Response.Location, comment: comment } ) // now we're saving to aws AND the db.
+  Image.create( { location: awsS3Response.Location, comment: comment, name: name } ) // now we're saving to aws AND the db.
   // for some reason AWS returns the object with a capital Location. so we need to deal with that.
 ).then((image) => { // image is the model that was created/saved.
   console.log('Success!');

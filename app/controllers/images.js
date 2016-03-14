@@ -1,7 +1,11 @@
 'use strict';
 
+const fs = require('fs');
+const fileType = require('file-type');
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
+const awsUpload = require('../../lib/aws-upload');
+
 const Image = models.image;
 
 const multer = require('multer'); //
@@ -14,10 +18,26 @@ const index = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-  // res.json( { body: req.body, file: req.file } );
-  Image.create(req.body.image)
-    .then(image => res.json({ image }))
-    .catch(err => next(err));
+  let filename = req.file.originalname;
+  new Promise((resolve, reject) =>
+    fs.readFile(filename, (err, data) =>
+      err ? reject(err) : resolve(data)
+    )
+  ).then((data) => {
+    let file = { data };
+    file.type = fileType(data) || {
+      ext: 'bin',
+      mime: 'application/octet-stream',
+    };
+    return file;
+  }).then(awsUpload)
+  .then((awsS3Response) => {
+    return Image.create( { name: req.file.originalname, location: awsS3Response.Location, comment: req.body.image.comment  } );
+  }).then((image) => {
+    console.log('Success!');
+    console.log(image);
+    return res.json( { image } );
+  }).catch(err => next(err));
 };
 
 
