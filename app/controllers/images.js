@@ -5,6 +5,7 @@ const fileType = require('file-type');
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
 const awsUpload = require('../../lib/aws-upload');
+const authenticate = require('./concerns/authenticate');
 const awsDelete = require('../../lib/aws-delete');
 
 const Image = models.image;
@@ -20,6 +21,7 @@ const index = (req, res, next) => {
 
 const create = (req, res, next) => {
   let filename = req.file.originalname;
+  console.log(req.currentUser);
   new Promise((resolve, reject) =>
     fs.readFile(filename, (err, data) =>
       err ? reject(err) : resolve(data)
@@ -33,7 +35,7 @@ const create = (req, res, next) => {
     return file;
   }).then(awsUpload)
   .then((awsS3Response) => {
-    return Image.create( { name: req.file.originalname, location: awsS3Response.Location, comment: req.body.image.comment  } );
+    return Image.create( { name: req.file.originalname, location: awsS3Response.Location, comment: req.body.image.comment, _owner: req.currentUser._id } );
   }).then((image) => {
     console.log('Success!');
     console.log(image);
@@ -66,5 +68,6 @@ module.exports = controller({
   create,
   destroy
 }, { before: [
+  { method: authenticate, except: ['index', 'show'], },
   { method: upload.single('image[file]'), only: ['create'] },
 ], });

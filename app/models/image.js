@@ -13,7 +13,12 @@ const imageSchema = new mongoose.Schema({
   },
   comment: {
     type: String
-  }
+  },
+  _owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
 }, {
   timestamps: true,
   toObject: { virtuals: true }, // like serializing
