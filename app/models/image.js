@@ -19,10 +19,13 @@ const imageSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  tags: [String],
+  tags: {
+    type: Array
+  },
   folder: {
-    type: String,
-    required: true
+    type: Array,
+    required: true,
+    default: ['main']
   }
 }, {
   timestamps: true,
