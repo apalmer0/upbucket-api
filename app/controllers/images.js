@@ -22,6 +22,7 @@ const index = (req, res, next) => {
 const create = (req, res, next) => {
   let filename = req.file.originalname;
   let tagsArray = req.body.image.tags.split(', ');
+  console.log(req.body.image.folder);
   new Promise((resolve, reject) =>
     fs.readFile(filename, (err, data) =>
       err ? reject(err) : resolve(data)
@@ -35,7 +36,7 @@ const create = (req, res, next) => {
     return file;
   }).then(awsUpload)
   .then((awsS3Response) => {
-    return Image.create( { name: req.file.originalname, location: awsS3Response.Location, comment: req.body.image.comment, _owner: req.currentUser._id, tags: tagsArray } );
+    return Image.create( { folder: req.body.image.folder, name: req.file.originalname, location: awsS3Response.Location, comment: req.body.image.comment, _owner: req.currentUser._id, tags: tagsArray } );
   }).then((image) => {
     console.log('Success!');
     console.log(image);

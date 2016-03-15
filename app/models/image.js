@@ -19,7 +19,11 @@ const imageSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  tags: [String]
+  tags: [String],
+  folder: {
+    type: String,
+    required: true
+  }
 }, {
   timestamps: true,
   toObject: { virtuals: true }, // like serializing
