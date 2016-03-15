@@ -49,9 +49,9 @@ let logOut = function logOut (event) {
   var formData = new FormData(event.target);
   $.ajax({
     // why do i have to access these via myApp.user.user?
-    url: globalVariables.myApp.baseUrl + '/sign-out/' + globalVariables.myApp.user.user._id,
+    url: globalVariables.myApp.baseUrl + '/sign-out/' + globalVariables.user._id,
     headers: {
-      Authorization: 'Token token=' + globalVariables.myApp.user.user.token,
+      Authorization: 'Token token=' + globalVariables.user.token,
     },
     method: 'DELETE',
     contentType: false,

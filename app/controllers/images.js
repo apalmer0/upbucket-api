@@ -5,6 +5,7 @@ const fileType = require('file-type');
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
 const awsUpload = require('../../lib/aws-upload');
+const awsDelete = require('../../lib/aws-delete');
 
 const Image = models.image;
 
@@ -41,15 +42,24 @@ const create = (req, res, next) => {
 };
 
 const destroy = (req, res, next) => {
+
   Image.findById(req.params.id)
-  .then((image) => {
-    image.remove();
-    res.json(true);
-  })
-    // .then(images => res.json({ images }))
-  .catch(err => next(err));
+  .then((image) =>
+    image.location
+  ).then(awsDelete)
+  .then((response) => {
+    console.log('hmmm');
+    console.log(response);
+  }).catch(err => next(err));
 };
 
+// return Image.create( { name: req.file.originalname, location: awsS3Response.Location, comment: req.body.image.comment  } );
+//
+// then((image) =>
+// .then((image) => {
+//   image.remove();
+//   res.json(true);
+// })
 
 module.exports = controller({
   index,
