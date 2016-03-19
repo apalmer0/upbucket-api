@@ -50,17 +50,6 @@ const show = (req, res, next) => {
     .catch(err => next(err));
 };
 
-// const update = function(id, field, value) {
-//   let modify = {};
-//   modify[field] = value;
-//   Image.findByIdAndUpdate(id, { $set: modify }, { new: true })
-//     .then(function(image) {
-//       console.log(image.toJSON());
-//     }).catch(console.error)
-//     .then(done);
-// };
-
-
 const update = (req, res, next) => {
   console.log(req.body);
   Image.findById(req.params.id)
@@ -77,22 +66,17 @@ const update = (req, res, next) => {
 
 const destroy = (req, res, next) => {
   Image.findById(req.params.id)
-  .then((image) =>
-    image.location
-  ).then(awsDelete)
-  .then((response) => {
-    console.log('hmmm');
-    console.log(response);
+  .then((image) => {
+    image.remove();
+    res.json(true);
+  // // .then((image) =>
+  // //   image.location
+  // // ).then(awsDelete)
+  // .then((response) => {
+  //   console.log('hmmm');
+  //   console.log(response);
   }).catch(err => next(err));
 };
-
-// return Image.create( { name: req.file.originalname, location: awsS3Response.Location, comment: req.body.image.comment  } );
-//
-// then((image) =>
-// .then((image) => {
-//   image.remove();
-//   res.json(true);
-// })
 
 module.exports = controller({
   index,
