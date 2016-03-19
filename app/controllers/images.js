@@ -44,8 +44,38 @@ const create = (req, res, next) => {
   }).catch(err => next(err));
 };
 
-const destroy = (req, res, next) => {
+const show = (req, res, next) => {
+  Image.findById(req.params.id)
+    .then(image => image ? res.json({ image }) : next())
+    .catch(err => next(err));
+};
 
+// const update = function(id, field, value) {
+//   let modify = {};
+//   modify[field] = value;
+//   Image.findByIdAndUpdate(id, { $set: modify }, { new: true })
+//     .then(function(image) {
+//       console.log(image.toJSON());
+//     }).catch(console.error)
+//     .then(done);
+// };
+
+
+const update = (req, res, next) => {
+  console.log(req.body);
+  Image.findById(req.params.id)
+    .then(image => {
+      if (!image) {
+        return next();
+      }
+      console.log(image);
+      return image.update(req.body)
+        .then(() => res.sendStatus(200));
+    })
+    .catch(err => next(err));
+};
+
+const destroy = (req, res, next) => {
   Image.findById(req.params.id)
   .then((image) =>
     image.location
@@ -67,6 +97,8 @@ const destroy = (req, res, next) => {
 module.exports = controller({
   index,
   create,
+  show,
+  update,
   destroy
 }, { before: [
   { method: authenticate, except: ['index', 'show'], },
