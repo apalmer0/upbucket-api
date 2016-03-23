@@ -5,6 +5,18 @@ const mongoose = require('mongoose');
 const uniqueValidator = require('mongoose-unique-validator');
 
 const userSchema = new mongoose.Schema({
+  name: {
+    given: {
+      type: String,
+      required: true,
+      default: 'John'
+    },
+    surname: {
+      type: String,
+      required: true,
+      default: 'Smith'
+    }
+  },
   email: {
     type: String,
     unique: true,
@@ -14,12 +26,21 @@ const userSchema = new mongoose.Schema({
     type: String,
     require: true,
   },
+  collaborators: {
+    type: Array,
+  },
   passwordDigest: String,
 }, {
   timestamps: true,
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 });
 
 userSchema.plugin(uniqueValidator);
+
+userSchema.virtual('fullName').get(function(){
+  return this.name.given + ' ' + this.name.surname;
+});
 
 userSchema.methods.comparePassword = function (password) {
   let _this = this;

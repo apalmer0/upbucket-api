@@ -32,6 +32,20 @@ const show = (req, res, next) => {
     .catch(err => next(err));
 };
 
+const update = (req, res, next) => {
+  console.log(req.body);
+  User.findById(req.params.id)
+    .then(user => {
+      if (!user) {
+        return next();
+      }
+      console.log(user);
+      return user.update(req.body)
+        .then(() => res.sendStatus(200));
+    })
+    .catch(err => next(err));
+};
+
 const signup = (req, res, next) => {
   let credentials = req.body.credentials;
   let user = { email: credentials.email };
@@ -108,6 +122,7 @@ const changepw = (req, res, next) => {
 module.exports = controller({
   index,
   show,
+  update,
   signup,
   signin,
   signout,
