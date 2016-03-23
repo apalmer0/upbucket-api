@@ -26,6 +26,7 @@ const create = (req, res, next) => {
     folder: req.body.image.folder,
     comment: req.body.image.comment,
     tagsArray: req.body.image.tags.split(', '),
+    ownerName: req.currentUser.fullName,
     _owner: req.currentUser._id,
   });
   awsS3Upload(file)

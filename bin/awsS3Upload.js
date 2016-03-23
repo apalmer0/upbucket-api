@@ -14,8 +14,9 @@ let awsS3Upload = function(fileToUpload){
         name: fileToUpload.name,
         folder: fileToUpload.folder,
         comment: fileToUpload.comment,
-        tags: fileToUpload.tags,
-        _owner: fileToUpload._owner
+        tags: fileToUpload.tagsArray,
+        _owner: fileToUpload._owner,
+        _ownerName: fileToUpload.ownerName
       });
   }).then((file) => {
     console.log('Success!');

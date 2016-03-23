@@ -9,12 +9,12 @@ const userSchema = new mongoose.Schema({
     given: {
       type: String,
       required: true,
-      default: 'John'
+      default: 'Upbucket'
     },
     surname: {
       type: String,
       required: true,
-      default: 'Smith'
+      default: 'User'
     }
   },
   email: {
