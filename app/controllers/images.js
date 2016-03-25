@@ -5,7 +5,7 @@
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
 // const awsUpload = require('../../lib/aws-upload');
-const awsS3Upload = require('../../bin/awsS3Upload');
+const awsS3Upload = require('../../lib/awsS3Upload');
 const authenticate = require('./concerns/authenticate');
 // const awsDelete = require('../../lib/aws-delete');
 
