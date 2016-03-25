@@ -1,5 +1,11 @@
-A template for starting projects with express as an API. Includes authentication
-and common middlewares.
+# upBucket API
 
-This template follows Rails-like conventions for organizing controller and model
-code, and has a routing layer which is similar to the Rails routing DSL.
+A basic file-storage system that allows users to save files to Amazon Web
+Services. It's a lot like Dropbox, but different... mostly because of the
+name.
+
+## Hosted on github pages
+
+  [upBucket Client](http://apalmer0.github.io/upbucket-client/index.html)
+  [upBucket API](https://pacific-chamber-64011.herokuapp.com)
+  
