@@ -12,7 +12,7 @@ const authenticate = require('./concerns/authenticate');
 const Image = models.image;
 
 const multer = require('multer'); //
-const upload = multer({ storage: multer.memoryStorage() });
+const multerStorage = multer({ storage: multer.memoryStorage() });
 
 const index = (req, res, next) => {
   Image.find()
@@ -76,5 +76,6 @@ module.exports = controller({
   destroy
 }, { before: [
   { method: authenticate, except: ['index', 'show'], },
-  { method: upload.single('image[file]'), only: ['create'] },
+  { method: multerStorage.single('image[file]'), only: ['create'] },
+  { method: multerStorage.single('image'), only: ['update'] }
 ], });
