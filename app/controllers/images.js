@@ -38,6 +38,7 @@ const create = (req, res, next) => {
 
 const show = (req, res, next) => {
   Image.findById(req.params.id)
+    .then(image => String(image._owner) === String(req.currentUser._id) ? image : next())
     .then(image => image ? res.json({ image }) : next())
     .catch(err => next(err));
 };
@@ -77,7 +78,7 @@ module.exports = controller({
   update,
   destroy
 }, { before: [
-  { method: authenticate, except: [ 'show'], },
+  { method: authenticate },
   { method: multerStorage.single('image[file]'), only: ['create'] },
   { method: multerStorage.single('image'), only: ['update'] }
 ], });
