@@ -14,8 +14,10 @@ const Image = models.image;
 const multer = require('multer'); //
 const multerStorage = multer({ storage: multer.memoryStorage() });
 
+
 const index = (req, res, next) => {
-  Image.find()
+  let imageFilter = { _owner: req.currentUser };
+  Image.find(imageFilter)
     .then(images => res.json({ images }))
     .catch(err => next(err));
 };
@@ -75,7 +77,7 @@ module.exports = controller({
   update,
   destroy
 }, { before: [
-  { method: authenticate, except: ['index', 'show'], },
+  { method: authenticate, except: [ 'show'], },
   { method: multerStorage.single('image[file]'), only: ['create'] },
   { method: multerStorage.single('image'), only: ['update'] }
 ], });
