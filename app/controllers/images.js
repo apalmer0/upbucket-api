@@ -1,13 +1,9 @@
 'use strict';
 
-// const fs = require('fs');
-// const fileType = require('file-type');
 const controller = require('lib/wiring/controller');
 const models = require('app/models');
-// const awsUpload = require('../../lib/aws-upload');
 const awsS3Upload = require('../../lib/awsS3Upload');
 const authenticate = require('./concerns/authenticate');
-// const awsDelete = require('../../lib/aws-delete');
 
 const Image = models.image;
 
@@ -37,15 +33,14 @@ const create = (req, res, next) => {
 };
 
 const show = (req, res, next) => {
-  Image.findById(req.params.id)
+  Image.findOne({ _id: req.params.id, _owner: req.currentUser })
     .then(image => String(image._owner) === String(req.currentUser._id) ? image : next())
     .then(image => image ? res.json({ image }) : next())
     .catch(err => next(err));
 };
 
 const update = (req, res, next) => {
-  console.log(req.body);
-  Image.findById(req.params.id)
+  Image.findOne({ _id: req.params.id, _owner: req.currentUser })
     .then(image => {
       if (!image) {
         return next();
@@ -58,17 +53,17 @@ const update = (req, res, next) => {
 };
 
 const destroy = (req, res, next) => {
-  Image.findById(req.params.id)
+
+  Image.findOne({ _id: req.params.id, _owner: req.currentUser })
+
   .then((image) => {
     image.remove();
     res.json(true);
   // // .then((image) =>
   // //   image.location
   // // ).then(awsDelete)
-  // .then((response) => {
-  //   console.log('hmmm');
-  //   console.log(response);
-  }).catch(err => next(err));
+  })
+  .catch(err => next(err));
 };
 
 module.exports = controller({
