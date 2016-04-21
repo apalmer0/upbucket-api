@@ -19,6 +19,7 @@ const index = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
+  console.log(req.file);
   let file = Object.assign(req.file, {
     name: req.file.originalname,
     folder: req.body.image.folder,
